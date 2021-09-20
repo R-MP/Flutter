@@ -72,6 +72,7 @@ class _HomeState extends State<Home> {
               padding: EdgeInsets.only(top: 20, bottom: 20),
               child: Container(
                 height: 50,
+                // ignore: deprecated_member_use
                 child: RaisedButton(
                   onPressed: _calc,
                   child: Text('=',

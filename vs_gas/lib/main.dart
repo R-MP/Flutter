@@ -37,9 +37,9 @@ class _HomeState extends State<Home> {
       double res = (x / y);
 
       if (res <= 0.7)
-        rsp = 'É melhor o etanol';
+        rsp = 'É melhor usar o etanol';
       else {
-        rsp = 'Use gasolina';
+        rsp = 'Vai de gasolina';
       }
     });
   }
@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _title(),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.blue[50],
       body: _body(),
     );
   }
@@ -69,10 +69,10 @@ class _HomeState extends State<Home> {
 
   _body() {
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
+      padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
       child: Column(
-        /* mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,*/
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           _image(),
@@ -88,9 +88,8 @@ class _HomeState extends State<Home> {
 // ignore: non_constant_identifier_names
   _image() {
     return Image.network(
-        'https://cdn.discordapp.com/attachments/306560320363560961/727349656362680391/image0.png',
+        'https://i.pinimg.com/564x/4f/ff/30/4fff3031eda04e5f55f5e761cf5bcd33.jpg',
         height: 200,
-        width: 200,
         fit: BoxFit.cover);
   }
 
@@ -107,31 +106,26 @@ class _HomeState extends State<Home> {
             style: TextStyle(color: Colors.black, fontSize: 25)));
   }
 
-// ignore: non_constant_identifier_names
-  _backimage() {
-    return BoxDecoration(
-      image: DecorationImage(image: NetworkImage(''), fit: BoxFit.cover),
-    );
-  }
-
   _button() {
     return Padding(
         padding: EdgeInsets.all(0),
         child: Container(
-            child: RaisedButton(
+            child: ElevatedButton(
           onPressed: _calc,
           child: Text('Calcular',
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 25,
                   fontWeight: FontWeight.bold)),
-          color: Colors.red,
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.red)),
         )));
   }
 
   _text(txt) {
     return Text(
       txt,
+      textAlign: TextAlign.center,
       style: TextStyle(
         color: Colors.black,
         fontSize: 25,

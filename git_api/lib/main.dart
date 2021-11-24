@@ -24,22 +24,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-TextEditingController cep = new TextEditingController();
+TextEditingController user = new TextEditingController();
 String inf = '';
+String avatar = 'https://play-lh.googleusercontent.com/PCpXdqvUWfCW1mXhH1Y_98yBpgsWxuTSTofy3NGMo9yBTATDyzVkqU580bfSln50bFU';
 
-findMe() async {
-  String url = 'https://viacep.com.br/ws/${cep.text}/json/';
+findMe() async {  
+  String url = 'https://api.github.com/users/${user.text}';
 
   http.Response ans = await http.get(Uri.parse(url));
 
   Map<String, dynamic> back = json.decode(ans.body);
-  String logradouro = back['logradouro'];
-  String bairro = back['bairro'];
-  String localidade = back['localidade'];
-  String uf = back['uf'];
+  String avatar_url = back["avatar_url"];
+
+  String name = back['name'];
+  int id = back['id'];
+  String res = back['repos_url'];
+  int followers = back['followers'];
+  int following = back['following'];
+  String created = back['created_at'];
 
   setState(() {
-    inf = '$logradouro \n$bairro - $localidade ($uf)';
+    avatar = '$avatar_url';
+    inf = 'Nome: $name \nID: $id \nRepositórios: $res \nSeguidores: $followers \nSeguindo: $following \nCriado em $created';
   });
 }
 
@@ -53,22 +59,28 @@ findMe() async {
 
   title(){
     return AppBar(
-      title: Text('I know where you are'),
+      title: Text('Hub View', style: TextStyle(fontSize:20, color: Colors.white)),
       centerTitle: true,
-      backgroundColor: Colors.green
+      backgroundColor: Colors.black
     );
   }
 
   body(){
-    return Container(
+    return SingleChildScrollView(
+    child: Container(
       margin: EdgeInsets.all(20),
       width: double.maxFinite,
-      height: double.maxFinite,
+      height: 580,
       child: Column(
         children: <Widget>[
         Container(
+          height: 200,
+          width: 200,
+          child: img()
+        ),
+        Container(
           margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
-          child:tf(TextInputType.number, cep, 'CEP')),
+          child:tf(TextInputType.text, user, 'Login')),
         Container(
           width: 300,
           height: 50,
@@ -79,20 +91,24 @@ findMe() async {
           height: 200,
           margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
           child: Text(inf,
-          style: TextStyle(fontSize:20, color: Colors.black))
+          style: TextStyle(fontSize:17, color: Colors.black, fontWeight: FontWeight.bold))
         )
         ]
       )
-    );
+    ));
+  }
+
+  img(){
+    return Image.network(avatar);
   }
 
   bt(){
     return ElevatedButton(
-      child: Text('Encontrar', style: TextStyle(fontSize:20, color: Colors.black)),
+      child: Text('Encontrar', style: TextStyle(fontSize:20, color: Colors.white)),
       onPressed: findMe,
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(Size.fromRadius(double.maxFinite)),
-        backgroundColor: MaterialStateProperty.all(Colors.green))
+        backgroundColor: MaterialStateProperty.all(Colors.black))
     );
   }
 
@@ -102,8 +118,8 @@ findMe() async {
       controller: controll,
       decoration: InputDecoration(
         labelText: txt,
-        labelStyle: TextStyle(color: Colors.green)),
-      style: TextStyle(color: Colors.green, fontSize:20)
+        labelStyle: TextStyle(color: Colors.black)),
+      style: TextStyle(color: Colors.black, fontSize:20)
     );
   }
 }

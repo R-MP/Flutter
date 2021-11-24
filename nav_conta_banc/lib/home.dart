@@ -11,6 +11,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   TextEditingController name = new TextEditingController();
+  TextEditingController age = new TextEditingController();
+  String sex = 'Não Informado';
+  String sch = 'Não Informado';
+  double current = 2000;
+  bool check = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,21 +41,99 @@ class _HomeState extends State<Home> {
     return SingleChildScrollView(
       child: 
       Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children:<Widget>[
       Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+        cont(name, 'Nome', TextInputType.name),
+        cont(age, 'Idade', TextInputType.number),
         pad(row(
-          txt('Nome:', 25, Colors.deepOrange),
-          tf(name),
-          ),0,20,0,0),
+        pad(db(sex, <String>['Não Informado', 'Masculino', 'Feminino', 'Helicopter'], 
+        (String? newValue){setState((){sex = newValue!;});}),20,0,25,0),
+        db(sch, <String>['Não Informado', 'Ensino Fundamental','Ensino Medio', 'Curso Superior', 'Pos Graduação'], 
+        (String? newValue){setState((){sch = newValue!;});})),0,5,0,0),
+        pad(row(txt('Credito Limite', 17.5, Colors.black, FontWeight.w500),Container(
+          width: 150, child:sld())),10,10,0,0),
+        row(pad(txt('Nacionalidade BR', 20, Colors.black, FontWeight.normal),0,0,10,0), swt()),
+        but(context)
          ]
         ),
        ],
       ),    
      );
+  }
+
+  but(BuildContext context){
+    return ElevatedButton(
+    child: txt('Confirmar', 20, Colors.white, FontWeight.normal),  
+    style: ButtonStyle(backgroundColor:MaterialStateProperty.all(Colors.black)),
+    onPressed: (){
+      Navigator.push(context, 
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return About( abName: name.text, abAge: age.text, abSex: sex, abSchl: sch, abCurrent: current, abCheck: check,);
+        }
+      ));
+    },
+    );
+  }
+
+  swt(){
+    return Checkbox(
+    checkColor: Colors.white,
+    fillColor: MaterialStateProperty.all(Colors.amber),
+    value: check,
+    onChanged: (bool? value){
+      setState(() {
+        check = value!;
+      });
+    },
+    );
+  }
+
+  sld(){
+    return Slider(
+    value: current,
+    activeColor: Colors.orange,
+    min: 1000,
+    max: 10000,
+    divisions: 100,
+    label: current.round().toString(),
+    onChanged: (double value){
+      setState(() {
+        current = value;
+      });
+    },
+    );
+  }
+
+  db(String bvalue, array, press){
+    return DropdownButton<String>(
+    value: bvalue,
+    style: TextStyle(fontSize:15, color: Colors.black, fontWeight: FontWeight.w600),
+    underline: Container(height:2, color: Colors.orange),
+    onChanged: press,
+    items: array
+    .map<DropdownMenuItem<String>>((String value) {
+      return DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      );
+    }).toList(),
+    );
+  }
+  
+
+  cont(tf_ctr, hnt, intype){
+    return pad(Container(
+            width: 320,
+            height: 70,
+            color: Colors.transparent,
+            child:
+            Center(child:tf(tf_ctr, hnt, intype)))
+            ,20,10,0,0);
   }
 
   row(con,cont){
@@ -68,22 +151,23 @@ class _HomeState extends State<Home> {
     );
   }
 
-  txt(content, double size, color){
+  txt(content, double size, color, weight){
   return Text(
     content,
-    style: TextStyle(fontSize: size, color: color)
+    style: TextStyle(fontSize: size, color: color, fontWeight: weight)
   );
   }
 
-  tf(controll) {
+  tf(controll, hint, ipt_type) {
     return TextField(
-      keyboardType: TextInputType.number,
+      keyboardType: ipt_type,
       controller: controll,
+      style: TextStyle(fontSize:20),
       decoration: InputDecoration(
-        hintText: 'aaaaaaa',
-        hintStyle: TextStyle(fontSize: 25, color: Colors.orange),
+        hintText: hint,
+        hintStyle: TextStyle(fontSize: 20, color: Colors.black),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.orange),
+        borderSide: BorderSide(color: Colors.orange),
         ),
       ),
     );
